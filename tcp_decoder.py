@@ -1,5 +1,7 @@
 import binascii
-packet = "0000c09fa09700a0cc3bbffa08004510003c463c40004006731cc0a80002c0a80001060e001799c5a0ec00000000a0027d78e0a30000020405b40402080a009c27240000000001030300"
+#packet = "0000c09fa09700a0cc3bbffa08004510003c463c40004006731cc0a80002c0a80001060e001799c5a0ec00000000a0027d78e0a30000020405b40402080a009c27240000000001030300"
+#packet = "00005e000101f077c32279a0080045000028ddd6400080060000811548a5a29f87eac90f01bbc6848684edfba882501001fff45e0000"
+packet = "f077c32279a030b64f86fe2d08004500002c76490000f706490cb9e080db811548a5eac4c06b6af5fe8700000000600204007b020000020405b4"
 
 eth2_header = packet[0:28]
 dst_mac = eth2_header[0:12]
@@ -87,24 +89,58 @@ tcp_header_length = (int(tcp_header_length_raw, 16)*32)/8
 tcp_end = int(ip_end+(tcp_header_length*2))
 tcp_header = packet[ip_end:tcp_end]
 
-print("Eth2 Header: ", eth2_header)
-print("\tDestination MAC: ", eth2_header)
-print("\tSource MAC: ", eth2_header)
-print("\tType: ", eth2_type)
-print("IP Header: ", ip_header)
-print("\tVersion: ", ip_version)
-print("\tHeader length: ", ip_header_length)
-print("\tTotal Length: ", ip_total_length)
-print("\tIdentification: ", ip_id)
-print("\tReserved Bit: ", ip_flag_reserved)
-print("\tDon't Fragment: ", ip_flag_dont)
-print("\tMore Fragments: ", ip_flag_more)
-print("\tFlag Offset: ", ip_flag_offset_bin)
-print("\tTime to live: ", ip_ttl)
-print("\tProtocol: ", ip_protocol)
-print("\tHeader checksum: ", ip_checksum)
-print("\tSource Address: ", ip_src)
-print("\tDestination Address: ", ip_dst)
-print("TCP Header: ", tcp_header)
+tcp_src_port_hex = tcp_header[0:4]
+tcp_src_port_dec = int(tcp_src_port_hex, 16)
 
+tcp_dst_port_hex = tcp_header[4:8]
+tcp_dst_port_dec = int(tcp_dst_port_hex, 16)
 
+tcp_seq_hex = tcp_header[8:16]
+tcp_seq_dec = int(tcp_seq_hex, 16)
+
+tcp_ack_hex = tcp_header[16:24]
+tcp_ack_dec = int(tcp_ack_hex, 16)
+
+tcp_header_len_hex = tcp_header[24:25]
+tcp_header_len_dec = int(tcp_header_len_hex, 16)
+
+tcp_flags_reserved = tcp_header[25:28]
+
+tcp_win_size_hex = tcp_header[28:32]
+tcp_win_size_dec = int(tcp_win_size_hex, 16)
+
+tcp_check_sum = tcp_header[32:36]
+
+tcp_urgent_pointer = tcp_header[36:40]
+
+tcp_options_raw = tcp_header[40:48]
+
+def print_test():
+    print(tcp_header_len_dec)
+    print(tcp_win_size_dec)
+    print(tcp_check_sum)
+    print(tcp_urgent_pointer)
+    print(tcp_options_raw)
+
+def print_all():
+    print("Eth2 Header: ", eth2_header)
+    print("\tDestination MAC: ", eth2_header)
+    print("\tSource MAC: ", eth2_header)
+    print("\tType: ", eth2_type)
+    print("IP Header: ", ip_header)
+    print("\tVersion: ", ip_version)
+    print("\tHeader length: ", ip_header_length)
+    print("\tTotal Length: ", ip_total_length)
+    print("\tIdentification: ", ip_id)
+    print("\tReserved Bit: ", ip_flag_reserved)
+    print("\tDon't Fragment: ", ip_flag_dont)
+    print("\tMore Fragments: ", ip_flag_more)
+    print("\tFlag Offset: ", ip_flag_offset_bin)
+    print("\tTime to live: ", ip_ttl)
+    print("\tProtocol: ", ip_protocol)
+    print("\tHeader checksum: ", ip_checksum)
+    print("\tSource Address: ", ip_src)
+    print("\tDestination Address: ", ip_dst)
+    print("TCP Header: ", tcp_header)
+
+print_test()
